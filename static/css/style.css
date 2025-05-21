@@ -102,3 +102,7 @@ main {
     margin-bottom: 1rem;
   }
 }
+.animate-on-scroll {
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out; /* 动画时长和动画方式 */
+}

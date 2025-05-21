@@ -122,12 +122,13 @@
 {% block extra_js %}
 <script>
   $(document).ready(function () {
-    // Increment/decrement quantity
+    // Increment/Decrement quantity
     $('.increment-qty').click(function () {
       let input = $(this).siblings('.quantity-input');
       let value = parseInt(input.val());
       if (value < 10) {
         input.val(value + 1);
+        updateCart(input);
       }
     });
 
@@ -136,10 +137,38 @@
       let value = parseInt(input.val());
       if (value > 1) {
         input.val(value - 1);
+        updateCart(input);
       }
     });
 
-    // Auto-submit the form when clicking the trash icon
+    // AJAX request to update cart quantity and price
+    function updateCart(input) {
+      let itemId = input.data('item-id');
+      let quantity = input.val();
+
+      $.ajax({
+        url: '{% url "view_cart" %}',  // Ensure this URL is correct
+        type: 'POST',
+        data: {
+          'cart_item_id': itemId,
+          'quantity': quantity,
+          'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()  // CSRF Token
+        },
+        success: function (response) {
+          // Update the current item's subtotal
+          let subtotalElement = input.closest('tr').find('.subtotal');
+          subtotalElement.text('$' + response.subtotal);
+
+          // Update the total price
+          $('.total-price').text('$' + response.total_price);
+        },
+        error: function () {
+          alert('Failed to update the cart. Please try again later!');
+        }
+      });
+    }
+
+    // Remove item from cart
     $('.remove-item').click(function () {
       $(this).closest('form').submit();
     });

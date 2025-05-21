@@ -32,8 +32,7 @@
             <hr>
             {% else %}
             <p>You are checking out as <strong>{{ user.username }}</strong>.</p>
-            <p>Name: {{ form.instance.name|default:user.customer.name|default:user.get_full_name|default:user.username
-              }}</p>
+            <p>Name: {{ form.instance.name|default:user.customer.name|default:user.get_full_name|default:user.username}}</p>
             <p>Email: {{ form.instance.email|default:user.customer.email|default:user.email }}</p>
             <p>Phone: {{ form.instance.phone|default:user.customer.phone|default:"Not set" }}</p>
             <p><small class="text-muted">If these details need updating, please update them in your profile or ensure
